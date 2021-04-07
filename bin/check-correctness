@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+script_dir="$(readlink -f $(dirname $0))"
+
+mix compile --force --warnings-as-errors
+
+mkdir -p priv/plts
+
+mix_tasks=(
+  "format --check-formatted"
+  "credo"
+  "dialyzer --no-compile"
+)
+
+for i in ${!mix_tasks[*]}; do
+  echo ${mix_tasks[$i]}
+done | parallel --col-sep ' ' --line-buffer mix {}

@@ -1,0 +1,26 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.4.0
+  hooks:
+  - id: trailing-whitespace
+  - id: end-of-file-fixer
+  - id: check-yaml
+  - id: check-added-large-files
+
+- repo: local
+  hooks:
+  - id: mix format
+    name: Check code formatting
+    entry: mix format
+    language: system
+    files: \.exs?
+    stages: [commit]
+
+  - id: check_correctness
+    name: Check Elixir warnings, code formatting, and Dialyzer warnings
+    entry: ./bin/check-correctness
+    language: system
+    pass_filenames: false
+    stages: [push]
